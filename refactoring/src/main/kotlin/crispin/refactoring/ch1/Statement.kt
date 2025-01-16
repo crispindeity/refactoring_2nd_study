@@ -7,6 +7,8 @@ fun statement(
     invoice: Invoice,
     plays: Map<String, Play>
 ): String {
+    fun playFor(performance: performance) = plays[performance.playID]!!
+
     var totalAmount = 0
     var volumeCredits = 0
 
@@ -40,7 +42,7 @@ fun statement(
     }
 
     for (performance in invoice.performances) {
-        val play: Play = plays[performance.playID]!!
+        val play: Play = playFor(performance)
 
         val thisAmount: Int = amountFor(play, performance)
 
