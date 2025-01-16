@@ -5,14 +5,27 @@ import java.util.Locale
 
 data class StatementData(
     val customer: String,
-    val performances: List<Performance>
+    val performances: List<EnrichedPerformance>
+)
+
+data class EnrichedPerformance(
+    val playID: String,
+    val audience: Int,
+    val play: Play
 )
 
 fun statement(
     invoice: Invoice,
     plays: Map<String, Play>
 ): String {
-    fun enrichPerformance(aPerformance: Performance): Performance = aPerformance.copy()
+    fun playFor(aPerformance: Performance): Play = plays[aPerformance.playID]!!
+
+    fun enrichPerformance(aPerformance: Performance): EnrichedPerformance =
+        EnrichedPerformance(
+            aPerformance.playID,
+            aPerformance.audience,
+            playFor(aPerformance)
+        )
 
     val statementData =
         StatementData(
@@ -27,14 +40,14 @@ private fun renderPlainText(
     data: StatementData,
     plays: Map<String, Play>
 ): String {
-    fun playFor(performance: Performance) = plays[performance.playID]!!
+    fun playFor(performance: EnrichedPerformance) = plays[performance.playID]!!
 
     fun krw(aNumber: Int): String? =
         NumberFormat
             .getCurrencyInstance(Locale.KOREA)
             .format(aNumber / 100)
 
-    fun amountFor(aPerformance: Performance): Int {
+    fun amountFor(aPerformance: EnrichedPerformance): Int {
         var result: Int
         when (playFor(aPerformance).type) {
             "tragedy" -> {
@@ -57,7 +70,7 @@ private fun renderPlainText(
         return result
     }
 
-    fun volumeCreditsFor(aPerformance: Performance): Int {
+    fun volumeCreditsFor(aPerformance: EnrichedPerformance): Int {
         var volumeCredits = 0
         volumeCredits += maxOf(aPerformance.audience - 30, 0)
 
@@ -67,7 +80,7 @@ private fun renderPlainText(
 
     fun totalAmount(): Int {
         var result = 0
-        for (performance: Performance in data.performances) {
+        for (performance: EnrichedPerformance in data.performances) {
             result += amountFor(performance)
         }
         return result
@@ -75,14 +88,14 @@ private fun renderPlainText(
 
     fun totalVolumeCredits(): Int {
         var result = 0
-        for (performance: Performance in data.performances) {
+        for (performance: EnrichedPerformance in data.performances) {
             result += volumeCreditsFor(performance)
         }
         return result
     }
 
     var result = "청구 내역 (고객명: ${data.customer})\n"
-    for (performance in data.performances) {
+    for (performance: EnrichedPerformance in data.performances) {
         result +=
             "    ${playFor(performance).name}: ${krw(amountFor(performance))} " +
             "(${performance.audience}석)\n"
