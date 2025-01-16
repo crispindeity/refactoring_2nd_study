@@ -6,6 +6,11 @@ import java.util.Locale
 fun statement(
     invoice: Invoice,
     plays: Map<String, Play>
+): String = renderPlainText(plays, invoice)
+
+private fun renderPlainText(
+    plays: Map<String, Play>,
+    invoice: Invoice
 ): String {
     fun playFor(performance: performance) = plays[performance.playID]!!
 
