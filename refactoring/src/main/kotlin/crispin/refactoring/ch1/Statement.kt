@@ -38,10 +38,16 @@ fun statement(
         return result
     }
 
-    for (performance in invoice.performances) {
+    fun volumeCreditsFor(performance: performance): Int {
+        var volumeCredits = 0
         volumeCredits += maxOf(performance.audience - 30, 0)
 
         if ("comedy" == playFor(performance).type) volumeCredits += performance.audience / 5
+        return volumeCredits
+    }
+
+    for (performance in invoice.performances) {
+        volumeCredits += volumeCreditsFor(performance)
 
         result +=
             "    ${playFor(performance).name}: ${format.format(amountFor(performance) / 100)} " +
