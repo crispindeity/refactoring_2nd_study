@@ -59,13 +59,7 @@ fun statement(
 
     fun totalAmount(data: StatementData): Int = data.performances.sumOf { it.amount }
 
-    fun totalVolumeCredits(data: StatementData): Int {
-        var result = 0
-        for (performance: EnrichedPerformance in data.performances) {
-            result += performance.volumeCredits
-        }
-        return result
-    }
+    fun totalVolumeCredits(data: StatementData): Int = data.performances.sumOf { it.volumeCredits }
 
     fun enrichPerformance(aPerformance: Performance): EnrichedPerformance =
         EnrichedPerformance(
