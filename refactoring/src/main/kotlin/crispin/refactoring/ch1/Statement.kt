@@ -14,6 +14,7 @@ data class EnrichedPerformance(
     val play: Play
 ) {
     var amount: Int = 0
+    var volumeCredits: Int = 0
 }
 
 fun statement(
@@ -45,6 +46,14 @@ fun statement(
         return result
     }
 
+    fun volumeCreditsFor(aPerformance: EnrichedPerformance): Int {
+        var volumeCredits = 0
+        volumeCredits += maxOf(aPerformance.audience - 30, 0)
+
+        if ("comedy" == aPerformance.play.type) volumeCredits += aPerformance.audience / 5
+        return volumeCredits
+    }
+
     fun enrichPerformance(aPerformance: Performance): EnrichedPerformance =
         EnrichedPerformance(
             aPerformance.playID,
@@ -52,6 +61,7 @@ fun statement(
             playFor(aPerformance)
         ).apply {
             amount = amountFor(this)
+            volumeCredits = volumeCreditsFor(this)
         }
 
     val statementData =
@@ -69,14 +79,6 @@ private fun renderPlainText(data: StatementData): String {
             .getCurrencyInstance(Locale.KOREA)
             .format(aNumber / 100)
 
-    fun volumeCreditsFor(aPerformance: EnrichedPerformance): Int {
-        var volumeCredits = 0
-        volumeCredits += maxOf(aPerformance.audience - 30, 0)
-
-        if ("comedy" == aPerformance.play.type) volumeCredits += aPerformance.audience / 5
-        return volumeCredits
-    }
-
     fun totalAmount(): Int {
         var result = 0
         for (performance: EnrichedPerformance in data.performances) {
@@ -88,7 +90,7 @@ private fun renderPlainText(data: StatementData): String {
     fun totalVolumeCredits(): Int {
         var result = 0
         for (performance: EnrichedPerformance in data.performances) {
-            result += volumeCreditsFor(performance)
+            result += performance.volumeCredits
         }
         return result
     }
