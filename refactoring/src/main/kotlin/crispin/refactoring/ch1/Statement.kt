@@ -52,6 +52,9 @@ fun statement(
         result +=
             "    ${playFor(performance).name}: ${krw(amountFor(performance))} " +
             "(${performance.audience}석)\n"
+    }
+
+    for (performance: performance in invoice.performances) {
         totalAmount += amountFor(performance)
     }
 
