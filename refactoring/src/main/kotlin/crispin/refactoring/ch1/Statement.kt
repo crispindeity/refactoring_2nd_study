@@ -38,11 +38,11 @@ fun statement(
         return result
     }
 
-    fun volumeCreditsFor(performance: performance): Int {
+    fun volumeCreditsFor(aPerformance: performance): Int {
         var volumeCredits = 0
-        volumeCredits += maxOf(performance.audience - 30, 0)
+        volumeCredits += maxOf(aPerformance.audience - 30, 0)
 
-        if ("comedy" == playFor(performance).type) volumeCredits += performance.audience / 5
+        if ("comedy" == playFor(aPerformance).type) volumeCredits += aPerformance.audience / 5
         return volumeCredits
     }
 
