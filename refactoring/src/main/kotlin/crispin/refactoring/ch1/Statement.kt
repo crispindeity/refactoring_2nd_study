@@ -51,13 +51,16 @@ fun statement(
     }
 
     for (performance in invoice.performances) {
-        volumeCredits += volumeCreditsFor(performance)
-
         result +=
             "    ${playFor(performance).name}: ${krw(amountFor(performance))} " +
             "(${performance.audience}석)\n"
         totalAmount += amountFor(performance)
     }
+
+    for (performance in invoice.performances) {
+        volumeCredits += volumeCreditsFor(performance)
+    }
+
     result += "총액: ${krw(totalAmount)}\n"
     result += "적립 포인트: ${volumeCredits}점\n"
     return result
