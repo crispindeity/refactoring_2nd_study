@@ -15,10 +15,7 @@ fun statement(
     var result = "청구 내역 (고객명: ${invoice.customer})\n"
     val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.KOREA)
 
-    fun amountFor(
-        play: Play,
-        aPerformance: performance
-    ): Int {
+    fun amountFor(aPerformance: performance): Int {
         var result: Int
         when (playFor(aPerformance).type) {
             "tragedy" -> {
@@ -42,7 +39,7 @@ fun statement(
     }
 
     for (performance in invoice.performances) {
-        val thisAmount: Int = amountFor(playFor(performance), performance)
+        val thisAmount: Int = amountFor(performance)
 
         volumeCredits += maxOf(performance.audience - 30, 0)
 
