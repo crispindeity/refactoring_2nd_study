@@ -52,10 +52,20 @@ fun statement(
             "(${performance.audience}석)\n"
     }
 
-    var totalAmount = 0
-    for (performance: performance in invoice.performances) {
-        totalAmount += amountFor(performance)
+    /*
+    todo    :: 임시 함수 이름 추후 변경
+     author :: heechoel shin
+     date   :: 2025-01-16T19:0:58KST
+     */
+    fun tempFunctionName(invoice: Invoice): Int {
+        var totalAmount = 0
+        for (performance: performance in invoice.performances) {
+            totalAmount += amountFor(performance)
+        }
+        return totalAmount
     }
+
+    val totalAmount: Int = tempFunctionName(invoice)
 
     fun totalVolumeCredits(): Int {
         var volumeCredits = 0
