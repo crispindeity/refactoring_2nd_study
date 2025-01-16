@@ -33,15 +33,10 @@ fun statement(
             invoice.performances.map { enrichPerformance(it) }
         )
 
-    return renderPlainText(statementData, plays)
+    return renderPlainText(statementData)
 }
 
-private fun renderPlainText(
-    data: StatementData,
-    plays: Map<String, Play>
-): String {
-    fun playFor(performance: EnrichedPerformance) = plays[performance.playID]!!
-
+private fun renderPlainText(data: StatementData): String {
     fun krw(aNumber: Int): String? =
         NumberFormat
             .getCurrencyInstance(Locale.KOREA)
