@@ -41,9 +41,8 @@ fun statement(
 
     for (performance in invoice.performances) {
         val play: Play = plays[performance.playID]!!
-        var thisAmount = 0
 
-        thisAmount = amountFor(play, performance)
+        val thisAmount: Int = amountFor(play, performance)
 
         volumeCredits += maxOf(performance.audience - 30, 0)
 
