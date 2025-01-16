@@ -20,10 +20,10 @@ data class EnrichedPerformance(
     var volumeCredits: Int = 0
 }
 
-fun statement(
+fun createStatementData(
     invoice: Invoice,
     plays: Map<String, Play>
-): String {
+): StatementData {
     fun playFor(aPerformance: Performance): Play = plays[aPerformance.playID]!!
 
     fun amountFor(aPerformance: EnrichedPerformance): Int {
@@ -80,7 +80,7 @@ fun statement(
             totalVolumeCredits = totalVolumeCredits(this)
         }
 
-    return renderPlainText(statementData)
+    return statementData
 }
 
 private fun renderPlainText(data: StatementData): String {
@@ -100,6 +100,11 @@ private fun renderPlainText(data: StatementData): String {
     result += "적립 포인트: ${data.totalVolumeCredits}점\n"
     return result
 }
+
+fun statement(
+    invoice: Invoice,
+    plays: Map<String, Play>
+): String = renderPlainText(createStatementData(invoice, plays))
 
 fun main() {
     println(statement(invoice = invoices[0], plays = plays))
