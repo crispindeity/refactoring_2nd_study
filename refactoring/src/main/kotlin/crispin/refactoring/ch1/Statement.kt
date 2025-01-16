@@ -52,12 +52,7 @@ fun statement(
             "(${performance.audience}석)\n"
     }
 
-    /*
-    todo    :: 임시 함수 이름 추후 변경
-     author :: heechoel shin
-     date   :: 2025-01-16T19:0:58KST
-     */
-    fun tempFunctionName(invoice: Invoice): Int {
+    fun totalAmount(invoice: Invoice): Int {
         var totalAmount = 0
         for (performance: performance in invoice.performances) {
             totalAmount += amountFor(performance)
@@ -73,7 +68,7 @@ fun statement(
         return volumeCredits
     }
 
-    result += "총액: ${krw(tempFunctionName(invoice))}\n"
+    result += "총액: ${krw(totalAmount(invoice))}\n"
     result += "적립 포인트: ${totalVolumeCredits()}점\n"
     return result
 }
