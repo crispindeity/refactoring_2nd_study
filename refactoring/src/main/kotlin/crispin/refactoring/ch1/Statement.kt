@@ -63,10 +63,8 @@ fun statement(
         return volumeCredits
     }
 
-    val volumeCredits: Int = totalVolumeCredits()
-
     result += "총액: ${krw(totalAmount)}\n"
-    result += "적립 포인트: ${volumeCredits}점\n"
+    result += "적립 포인트: ${totalVolumeCredits()}점\n"
     return result
 }
 
