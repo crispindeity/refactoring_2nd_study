@@ -20,7 +20,7 @@ fun statement(
         aPerformance: performance
     ): Int {
         var result: Int
-        when (play.type) {
+        when (playFor(aPerformance).type) {
             "tragedy" -> {
                 result = 40000
                 if (aPerformance.audience > 30) {
@@ -36,7 +36,7 @@ fun statement(
                 result += 300 * aPerformance.audience
             }
 
-            else -> throw IllegalArgumentException("알 수 없는 장르: ${play.type}")
+            else -> throw IllegalArgumentException("알 수 없는 장르: ${playFor(aPerformance).type}")
         }
         return result
     }
