@@ -11,11 +11,14 @@ data class StatementData(
 fun statement(
     invoice: Invoice,
     plays: Map<String, Play>
-): String = renderPlainText(plays, invoice)
+): String {
+    val statementData = StatementData(invoice.customer, invoice.performances)
+    return renderPlainText(statementData, plays)
+}
 
 private fun renderPlainText(
-    plays: Map<String, Play>,
-    invoice: Invoice
+    data: StatementData,
+    plays: Map<String, Play>
 ): String {
     fun playFor(performance: Performance) = plays[performance.playID]!!
 
@@ -55,9 +58,9 @@ private fun renderPlainText(
         return volumeCredits
     }
 
-    fun totalAmount(invoice: Invoice): Int {
+    fun totalAmount(): Int {
         var result = 0
-        for (performance: Performance in invoice.performances) {
+        for (performance: Performance in data.performances) {
             result += amountFor(performance)
         }
         return result
@@ -65,20 +68,20 @@ private fun renderPlainText(
 
     fun totalVolumeCredits(): Int {
         var result = 0
-        for (performance: Performance in invoice.performances) {
+        for (performance: Performance in data.performances) {
             result += volumeCreditsFor(performance)
         }
         return result
     }
 
-    var result = "청구 내역 (고객명: ${invoice.customer})\n"
-    for (performance in invoice.performances) {
+    var result = "청구 내역 (고객명: ${data.customer})\n"
+    for (performance in data.performances) {
         result +=
             "    ${playFor(performance).name}: ${krw(amountFor(performance))} " +
             "(${performance.audience}석)\n"
     }
 
-    result += "총액: ${krw(totalAmount(invoice))}\n"
+    result += "총액: ${krw(totalAmount())}\n"
     result += "적립 포인트: ${totalVolumeCredits()}점\n"
     return result
 }
