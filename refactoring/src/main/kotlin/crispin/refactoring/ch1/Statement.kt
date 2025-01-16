@@ -8,7 +8,6 @@ fun statement(
     plays: Map<String, Play>
 ): String {
     fun playFor(performance: performance) = plays[performance.playID]!!
-    var result = "청구 내역 (고객명: ${invoice.customer})\n"
 
     fun krw(aNumber: Int): String? =
         NumberFormat
@@ -46,12 +45,6 @@ fun statement(
         return volumeCredits
     }
 
-    for (performance in invoice.performances) {
-        result +=
-            "    ${playFor(performance).name}: ${krw(amountFor(performance))} " +
-            "(${performance.audience}석)\n"
-    }
-
     fun totalAmount(invoice: Invoice): Int {
         var result = 0
         for (performance: performance in invoice.performances) {
@@ -66,6 +59,13 @@ fun statement(
             result += volumeCreditsFor(performance)
         }
         return result
+    }
+
+    var result = "청구 내역 (고객명: ${invoice.customer})\n"
+    for (performance in invoice.performances) {
+        result +=
+            "    ${playFor(performance).name}: ${krw(amountFor(performance))} " +
+            "(${performance.audience}석)\n"
     }
 
     result += "총액: ${krw(totalAmount(invoice))}\n"
