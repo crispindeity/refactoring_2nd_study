@@ -49,7 +49,7 @@ private fun renderPlainText(
 
     fun amountFor(aPerformance: EnrichedPerformance): Int {
         var result: Int
-        when (playFor(aPerformance).type) {
+        when (aPerformance.play.type) {
             "tragedy" -> {
                 result = 40000
                 if (aPerformance.audience > 30) {
@@ -65,7 +65,7 @@ private fun renderPlainText(
                 result += 300 * aPerformance.audience
             }
 
-            else -> throw IllegalArgumentException("알 수 없는 장르: ${playFor(aPerformance).type}")
+            else -> throw IllegalArgumentException("알 수 없는 장르: ${aPerformance.play.type}")
         }
         return result
     }
@@ -74,7 +74,7 @@ private fun renderPlainText(
         var volumeCredits = 0
         volumeCredits += maxOf(aPerformance.audience - 30, 0)
 
-        if ("comedy" == playFor(aPerformance).type) volumeCredits += aPerformance.audience / 5
+        if ("comedy" == aPerformance.play.type) volumeCredits += aPerformance.audience / 5
         return volumeCredits
     }
 
@@ -97,7 +97,7 @@ private fun renderPlainText(
     var result = "청구 내역 (고객명: ${data.customer})\n"
     for (performance: EnrichedPerformance in data.performances) {
         result +=
-            "    ${playFor(performance).name}: ${krw(amountFor(performance))} " +
+            "    ${performance.play.name}: ${krw(amountFor(performance))} " +
             "(${performance.audience}석)\n"
     }
 
