@@ -3,6 +3,11 @@ package crispin.refactoring.ch1
 import java.text.NumberFormat
 import java.util.Locale
 
+data class StatementData(
+    val customer: String,
+    val performances: List<Performance>
+)
+
 fun statement(
     invoice: Invoice,
     plays: Map<String, Play>
