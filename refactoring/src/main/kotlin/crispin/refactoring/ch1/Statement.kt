@@ -8,6 +8,7 @@ data class StatementData(
     val performances: List<EnrichedPerformance>
 ) {
     var totalAmount: Int = 0
+    var totalVolumeCredits: Int = 0
 }
 
 data class EnrichedPerformance(
@@ -64,6 +65,14 @@ fun statement(
         return result
     }
 
+    fun totalVolumeCredits(data: StatementData): Int {
+        var result = 0
+        for (performance: EnrichedPerformance in data.performances) {
+            result += performance.volumeCredits
+        }
+        return result
+    }
+
     fun enrichPerformance(aPerformance: Performance): EnrichedPerformance =
         EnrichedPerformance(
             aPerformance.playID,
@@ -80,6 +89,7 @@ fun statement(
             invoice.performances.map { enrichPerformance(it) }
         ).apply {
             totalAmount = totalAmount(this)
+            totalVolumeCredits = totalVolumeCredits(this)
         }
 
     return renderPlainText(statementData)
@@ -91,14 +101,6 @@ private fun renderPlainText(data: StatementData): String {
             .getCurrencyInstance(Locale.KOREA)
             .format(aNumber / 100)
 
-    fun totalVolumeCredits(): Int {
-        var result = 0
-        for (performance: EnrichedPerformance in data.performances) {
-            result += performance.volumeCredits
-        }
-        return result
-    }
-
     var result = "청구 내역 (고객명: ${data.customer})\n"
     for (performance: EnrichedPerformance in data.performances) {
         result +=
@@ -107,7 +109,7 @@ private fun renderPlainText(data: StatementData): String {
     }
 
     result += "총액: ${krw(data.totalAmount)}\n"
-    result += "적립 포인트: ${totalVolumeCredits()}점\n"
+    result += "적립 포인트: ${data.totalVolumeCredits}점\n"
     return result
 }
 
