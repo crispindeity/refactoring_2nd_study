@@ -13,10 +13,11 @@ fun statement(
     var result = "청구 내역 (고객명: ${invoice.customer})\n"
     val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.KOREA)
 
-    for (performance in invoice.performances) {
-        val play: Play = plays[performance.playID]!!
+    fun amountFor(
+        play: Play,
+        performance: performance
+    ): Int {
         var thisAmount = 0
-
         when (play.type) {
             "tragedy" -> {
                 thisAmount = 40000
@@ -35,6 +36,14 @@ fun statement(
 
             else -> throw IllegalArgumentException("알 수 없는 장르: ${play.type}")
         }
+        return thisAmount
+    }
+
+    for (performance in invoice.performances) {
+        val play: Play = plays[performance.playID]!!
+        var thisAmount = 0
+
+        thisAmount = amountFor(play, performance)
 
         volumeCredits += maxOf(performance.audience - 30, 0)
 
