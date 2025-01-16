@@ -42,16 +42,15 @@ fun statement(
     }
 
     for (performance in invoice.performances) {
-        val play: Play = playFor(performance)
-
-        val thisAmount: Int = amountFor(play, performance)
+        val thisAmount: Int = amountFor(playFor(performance), performance)
 
         volumeCredits += maxOf(performance.audience - 30, 0)
 
-        if ("comedy" == play.type) volumeCredits += performance.audience / 5
+        if ("comedy" == playFor(performance).type) volumeCredits += performance.audience / 5
 
         result +=
-            "    ${play.name}: ${format.format(thisAmount / 100)} (${performance.audience}석)\n"
+            "    ${playFor(performance).name}: ${format.format(thisAmount / 100)} " +
+            "(${performance.audience}석)\n"
         totalAmount += thisAmount
     }
     result += "총액: ${format.format(totalAmount / 100)}\n"
