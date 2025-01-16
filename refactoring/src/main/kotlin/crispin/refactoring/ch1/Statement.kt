@@ -53,19 +53,19 @@ fun statement(
     }
 
     fun totalAmount(invoice: Invoice): Int {
-        var totalAmount = 0
+        var result = 0
         for (performance: performance in invoice.performances) {
-            totalAmount += amountFor(performance)
+            result += amountFor(performance)
         }
-        return totalAmount
+        return result
     }
 
     fun totalVolumeCredits(): Int {
-        var volumeCredits = 0
+        var result = 0
         for (performance: performance in invoice.performances) {
-            volumeCredits += volumeCreditsFor(performance)
+            result += volumeCreditsFor(performance)
         }
-        return volumeCredits
+        return result
     }
 
     result += "총액: ${krw(totalAmount(invoice))}\n"
