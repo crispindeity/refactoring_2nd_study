@@ -12,14 +12,14 @@ private fun renderPlainText(
     plays: Map<String, Play>,
     invoice: Invoice
 ): String {
-    fun playFor(performance: performance) = plays[performance.playID]!!
+    fun playFor(performance: Performance) = plays[performance.playID]!!
 
     fun krw(aNumber: Int): String? =
         NumberFormat
             .getCurrencyInstance(Locale.KOREA)
             .format(aNumber / 100)
 
-    fun amountFor(aPerformance: performance): Int {
+    fun amountFor(aPerformance: Performance): Int {
         var result: Int
         when (playFor(aPerformance).type) {
             "tragedy" -> {
@@ -42,7 +42,7 @@ private fun renderPlainText(
         return result
     }
 
-    fun volumeCreditsFor(aPerformance: performance): Int {
+    fun volumeCreditsFor(aPerformance: Performance): Int {
         var volumeCredits = 0
         volumeCredits += maxOf(aPerformance.audience - 30, 0)
 
@@ -52,7 +52,7 @@ private fun renderPlainText(
 
     fun totalAmount(invoice: Invoice): Int {
         var result = 0
-        for (performance: performance in invoice.performances) {
+        for (performance: Performance in invoice.performances) {
             result += amountFor(performance)
         }
         return result
@@ -60,7 +60,7 @@ private fun renderPlainText(
 
     fun totalVolumeCredits(): Int {
         var result = 0
-        for (performance: performance in invoice.performances) {
+        for (performance: Performance in invoice.performances) {
             result += volumeCreditsFor(performance)
         }
         return result
