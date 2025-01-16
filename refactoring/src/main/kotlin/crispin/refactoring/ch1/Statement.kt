@@ -55,10 +55,15 @@ fun statement(
         totalAmount += amountFor(performance)
     }
 
-    var volumeCredits = 0
-    for (performance in invoice.performances) {
-        volumeCredits += volumeCreditsFor(performance)
+    fun totalVolumeCredits(): Int {
+        var volumeCredits = 0
+        for (performance: performance in invoice.performances) {
+            volumeCredits += volumeCreditsFor(performance)
+        }
+        return volumeCredits
     }
+
+    val volumeCredits: Int = totalVolumeCredits()
 
     result += "총액: ${krw(totalAmount)}\n"
     result += "적립 포인트: ${volumeCredits}점\n"
