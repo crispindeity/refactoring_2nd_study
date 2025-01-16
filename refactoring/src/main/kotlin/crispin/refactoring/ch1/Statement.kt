@@ -65,8 +65,6 @@ fun statement(
         return totalAmount
     }
 
-    val totalAmount: Int = tempFunctionName(invoice)
-
     fun totalVolumeCredits(): Int {
         var volumeCredits = 0
         for (performance: performance in invoice.performances) {
@@ -75,7 +73,7 @@ fun statement(
         return volumeCredits
     }
 
-    result += "총액: ${krw(totalAmount)}\n"
+    result += "총액: ${krw(tempFunctionName(invoice))}\n"
     result += "적립 포인트: ${totalVolumeCredits()}점\n"
     return result
 }
