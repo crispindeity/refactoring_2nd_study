@@ -10,8 +10,6 @@ fun statement(
     fun playFor(performance: performance) = plays[performance.playID]!!
 
     var totalAmount = 0
-    var volumeCredits = 0
-
     var result = "청구 내역 (고객명: ${invoice.customer})\n"
 
     fun krw(aNumber: Int): String? =
@@ -57,6 +55,7 @@ fun statement(
         totalAmount += amountFor(performance)
     }
 
+    var volumeCredits = 0
     for (performance in invoice.performances) {
         volumeCredits += volumeCreditsFor(performance)
     }
