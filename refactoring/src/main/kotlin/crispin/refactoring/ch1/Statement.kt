@@ -8,8 +8,6 @@ fun statement(
     plays: Map<String, Play>
 ): String {
     fun playFor(performance: performance) = plays[performance.playID]!!
-
-    var totalAmount = 0
     var result = "청구 내역 (고객명: ${invoice.customer})\n"
 
     fun krw(aNumber: Int): String? =
@@ -54,6 +52,7 @@ fun statement(
             "(${performance.audience}석)\n"
     }
 
+    var totalAmount = 0
     for (performance: performance in invoice.performances) {
         totalAmount += amountFor(performance)
     }
