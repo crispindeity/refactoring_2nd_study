@@ -14,10 +14,10 @@ fun statement(
 
     var result = "청구 내역 (고객명: ${invoice.customer})\n"
 
-    fun format(aNumber: Int): String? =
+    fun krw(aNumber: Int): String? =
         NumberFormat
             .getCurrencyInstance(Locale.KOREA)
-            .format(aNumber)
+            .format(aNumber / 100)
 
     fun amountFor(aPerformance: performance): Int {
         var result: Int
@@ -54,11 +54,11 @@ fun statement(
         volumeCredits += volumeCreditsFor(performance)
 
         result +=
-            "    ${playFor(performance).name}: ${format(amountFor(performance) / 100)} " +
+            "    ${playFor(performance).name}: ${krw(amountFor(performance))} " +
             "(${performance.audience}석)\n"
         totalAmount += amountFor(performance)
     }
-    result += "총액: ${format(totalAmount / 100)}\n"
+    result += "총액: ${krw(totalAmount)}\n"
     result += "적립 포인트: ${volumeCredits}점\n"
     return result
 }
