@@ -6,7 +6,9 @@ import java.util.Locale
 data class StatementData(
     val customer: String,
     val performances: List<EnrichedPerformance>
-)
+) {
+    var totalAmount: Int = 0
+}
 
 data class EnrichedPerformance(
     val playID: String,
@@ -54,6 +56,14 @@ fun statement(
         return volumeCredits
     }
 
+    fun totalAmount(data: StatementData): Int {
+        var result = 0
+        for (performance: EnrichedPerformance in data.performances) {
+            result += performance.amount
+        }
+        return result
+    }
+
     fun enrichPerformance(aPerformance: Performance): EnrichedPerformance =
         EnrichedPerformance(
             aPerformance.playID,
@@ -68,7 +78,9 @@ fun statement(
         StatementData(
             invoice.customer,
             invoice.performances.map { enrichPerformance(it) }
-        )
+        ).apply {
+            totalAmount = totalAmount(this)
+        }
 
     return renderPlainText(statementData)
 }
@@ -78,14 +90,6 @@ private fun renderPlainText(data: StatementData): String {
         NumberFormat
             .getCurrencyInstance(Locale.KOREA)
             .format(aNumber / 100)
-
-    fun totalAmount(): Int {
-        var result = 0
-        for (performance: EnrichedPerformance in data.performances) {
-            result += performance.amount
-        }
-        return result
-    }
 
     fun totalVolumeCredits(): Int {
         var result = 0
@@ -102,7 +106,7 @@ private fun renderPlainText(data: StatementData): String {
             "(${performance.audience}석)\n"
     }
 
-    result += "총액: ${krw(totalAmount())}\n"
+    result += "총액: ${krw(data.totalAmount)}\n"
     result += "적립 포인트: ${totalVolumeCredits()}점\n"
     return result
 }
