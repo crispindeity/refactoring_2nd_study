@@ -35,13 +35,7 @@ open class PerformanceCalculator(
 
     open fun getAmount(): Int = throw IllegalStateException("서브클래스에서 처리하도록 변경되었습니다.")
 
-    fun getVolumeCredits(): Int {
-        var volumeCredits = 0
-        volumeCredits += maxOf(aPerformance.audience - 30, 0)
-
-        if ("comedy" == aPlay.type) volumeCredits += aPerformance.audience / 5
-        return volumeCredits
-    }
+    open fun getVolumeCredits(): Int = maxOf(aPerformance.audience - 30, 0)
 }
 
 class TragedyCalculator(
@@ -69,6 +63,8 @@ class ComedyCalculator(
         result += 300 * this.aPerformance.audience
         return result
     }
+
+    override fun getVolumeCredits(): Int = super.getVolumeCredits() + aPerformance.audience / 5
 }
 
 fun createStatementData(
