@@ -17,10 +17,22 @@ data class EnrichedPerformance(
     var volumeCredits: Int = 0
 }
 
-class PerformanceCalculator(
+open class PerformanceCalculator(
     val aPerformance: Performance,
     val aPlay: Play
 ) {
+    companion object {
+        fun createCalculator(
+            aPerformance: Performance,
+            aPlay: Play
+        ): PerformanceCalculator =
+            when (aPlay.type) {
+                "tragedy" -> TragedyCalculator(aPerformance, aPlay)
+                "comedy" -> ComedyCalculator(aPerformance, aPlay)
+                else -> throw IllegalArgumentException("알 수 없는 장르: ${aPlay.type}")
+            }
+    }
+
     fun getAmount(): Int {
         var result: Int
         when (aPlay.type) {
@@ -51,8 +63,17 @@ class PerformanceCalculator(
         if ("comedy" == aPlay.type) volumeCredits += aPerformance.audience / 5
         return volumeCredits
     }
-
 }
+
+class TragedyCalculator(
+    aPerformance: Performance,
+    aPlay: Play
+) : PerformanceCalculator(aPerformance, aPlay)
+
+class ComedyCalculator(
+    aPerformance: Performance,
+    aPlay: Play
+) : PerformanceCalculator(aPerformance, aPlay)
 
 fun createStatementData(
     invoice: Invoice,
@@ -65,7 +86,8 @@ fun createStatementData(
     fun totalVolumeCredits(data: StatementData): Int = data.performances.sumOf { it.volumeCredits }
 
     fun enrichPerformance(aPerformance: Performance): EnrichedPerformance {
-        val performanceCalculator = PerformanceCalculator(aPerformance, playFor(aPerformance))
+        val performanceCalculator: PerformanceCalculator =
+            PerformanceCalculator.createCalculator(aPerformance, playFor(aPerformance))
         return EnrichedPerformance(
             aPerformance.playID,
             aPerformance.audience,
