@@ -3,11 +3,6 @@ package crispin.refactoring.ch1
 import java.text.NumberFormat
 import java.util.Locale
 
-fun krw(aNumber: Int): String? =
-    NumberFormat
-        .getCurrencyInstance(Locale.KOREA)
-        .format(aNumber / 100)
-
 class Statement(
     val invoice: Invoice,
     val plays: Map<String, Play>
@@ -40,6 +35,11 @@ class Statement(
         result += "<p>적립 포인트: <em>${data.totalVolumeCredits}</em>점</p>\n"
         return result
     }
+
+    private fun krw(aNumber: Int): String? =
+        NumberFormat
+            .getCurrencyInstance(Locale.KOREA)
+            .format(aNumber / 100)
 }
 
 fun main() {
