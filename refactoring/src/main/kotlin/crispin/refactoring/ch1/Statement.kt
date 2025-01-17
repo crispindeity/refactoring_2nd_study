@@ -3,12 +3,12 @@ package crispin.refactoring.ch1
 import java.text.NumberFormat
 import java.util.Locale
 
-private fun renderPlainText(data: StatementData): String {
-    fun krw(aNumber: Int): String? =
-        NumberFormat
-            .getCurrencyInstance(Locale.KOREA)
-            .format(aNumber / 100)
+fun krw(aNumber: Int): String? =
+    NumberFormat
+        .getCurrencyInstance(Locale.KOREA)
+        .format(aNumber / 100)
 
+private fun renderPlainText(data: StatementData): String {
     var result = "청구 내역 (고객명: ${data.customer})\n"
     for (performance: EnrichedPerformance in data.performances) {
         result +=
