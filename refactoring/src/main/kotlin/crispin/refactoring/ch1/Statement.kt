@@ -8,6 +8,11 @@ fun krw(aNumber: Int): String? =
         .getCurrencyInstance(Locale.KOREA)
         .format(aNumber / 100)
 
+fun statement(
+    invoice: Invoice,
+    plays: Map<String, Play>
+): String = renderPlainText(createStatementData(invoice, plays))
+
 private fun renderPlainText(data: StatementData): String {
     var result = "청구 내역 (고객명: ${data.customer})\n"
     for (performance: EnrichedPerformance in data.performances) {
@@ -21,11 +26,31 @@ private fun renderPlainText(data: StatementData): String {
     return result
 }
 
-fun statement(
+fun htmlStatement(
     invoice: Invoice,
     plays: Map<String, Play>
-): String = renderPlainText(createStatementData(invoice, plays))
+) = renderHtml(
+    createStatementData(
+        invoice,
+        plays
+    )
+)
+
+private fun renderHtml(data: StatementData): String {
+    var result = "<h1>청구 내역 (고객명: ${data.customer})</h1>\n"
+    result += "<table>\n"
+    result += "<tr><th>연극</th><th>좌석 수</th><th>금액</th></tr>"
+    for (performance: EnrichedPerformance in data.performances) {
+        result += "    <tr><td>${performance.play.name}</td><td>(${performance.audience}석)</td>"
+        result += "<td>${krw(performance.amount)}</td></tr>\n"
+    }
+    result += "</table>\n"
+    result += "<p>총액: <em>${krw(data.totalAmount)}</em></p>\n"
+    result += "<p>적립 포인트: <em>${data.totalVolumeCredits}</em>점</p>\n"
+    return result
+}
 
 fun main() {
     println(statement(invoice = invoices[0], plays = plays))
+    println(htmlStatement(invoice = invoices[0], plays = plays))
 }
