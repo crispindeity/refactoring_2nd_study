@@ -20,17 +20,10 @@ data class EnrichedPerformance(
 class PerformanceCalculator(
     val aPerformance: Performance,
     val aPlay: Play
-)
-
-fun createStatementData(
-    invoice: Invoice,
-    plays: Map<String, Play>
-): StatementData {
-    fun playFor(aPerformance: Performance): Play = plays[aPerformance.playID]!!
-
-    fun amountFor(aPerformance: EnrichedPerformance): Int {
+) {
+    fun getAmount(): Int {
         var result: Int
-        when (aPerformance.play.type) {
+        when (aPlay.type) {
             "tragedy" -> {
                 result = 40000
                 if (aPerformance.audience > 30) {
@@ -46,10 +39,17 @@ fun createStatementData(
                 result += 300 * aPerformance.audience
             }
 
-            else -> throw IllegalArgumentException("알 수 없는 장르: ${aPerformance.play.type}")
+            else -> throw IllegalArgumentException("알 수 없는 장르: ${aPlay.type}")
         }
         return result
     }
+}
+
+fun createStatementData(
+    invoice: Invoice,
+    plays: Map<String, Play>
+): StatementData {
+    fun playFor(aPerformance: Performance): Play = plays[aPerformance.playID]!!
 
     fun volumeCreditsFor(aPerformance: EnrichedPerformance): Int {
         var volumeCredits = 0
@@ -70,7 +70,7 @@ fun createStatementData(
             aPerformance.audience,
             performanceCalculator.aPlay
         ).apply {
-            amount = amountFor(this)
+            amount = performanceCalculator.getAmount()
             volumeCredits = volumeCreditsFor(this)
         }
     }
