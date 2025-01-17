@@ -17,7 +17,7 @@ data class EnrichedPerformance(
     var volumeCredits: Int = 0
 }
 
-open class PerformanceCalculator(
+abstract class PerformanceCalculator(
     val aPerformance: Performance,
     val aPlay: Play
 ) {
@@ -33,7 +33,7 @@ open class PerformanceCalculator(
             }
     }
 
-    open fun getAmount(): Int = throw IllegalStateException("서브클래스에서 처리하도록 변경되었습니다.")
+    abstract fun getAmount(): Int
 
     open fun getVolumeCredits(): Int = maxOf(aPerformance.audience - 30, 0)
 }
