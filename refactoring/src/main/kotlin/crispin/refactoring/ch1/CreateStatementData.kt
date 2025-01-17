@@ -67,17 +67,27 @@ class ComedyCalculator(
     override fun getVolumeCredits(): Int = super.getVolumeCredits() + aPerformance.audience / 5
 }
 
-fun createStatementData(
-    invoice: Invoice,
-    plays: Map<String, Play>
-): StatementData {
-    fun playFor(aPerformance: Performance): Play = plays[aPerformance.playID]!!
+class CreateStatementData(
+    private val invoice: Invoice,
+    private val plays: Map<String, Play>
+) {
+    fun getStatementData(): StatementData =
+        StatementData(
+            invoice.customer,
+            invoice.performances.map { enrichPerformance(it) }
+        ).apply {
+            totalAmount = totalAmount(this)
+            totalVolumeCredits = totalVolumeCredits(this)
+        }
 
-    fun totalAmount(data: StatementData): Int = data.performances.sumOf { it.amount }
+    private fun playFor(aPerformance: Performance): Play = plays[aPerformance.playID]!!
 
-    fun totalVolumeCredits(data: StatementData): Int = data.performances.sumOf { it.volumeCredits }
+    private fun totalAmount(data: StatementData): Int = data.performances.sumOf { it.amount }
 
-    fun enrichPerformance(aPerformance: Performance): EnrichedPerformance {
+    private fun totalVolumeCredits(data: StatementData): Int =
+        data.performances.sumOf { it.volumeCredits }
+
+    private fun enrichPerformance(aPerformance: Performance): EnrichedPerformance {
         val performanceCalculator: PerformanceCalculator =
             PerformanceCalculator.createCalculator(aPerformance, playFor(aPerformance))
         return EnrichedPerformance(
@@ -89,15 +99,4 @@ fun createStatementData(
             volumeCredits = performanceCalculator.getVolumeCredits()
         }
     }
-
-    val statementData =
-        StatementData(
-            invoice.customer,
-            invoice.performances.map { enrichPerformance(it) }
-        ).apply {
-            totalAmount = totalAmount(this)
-            totalVolumeCredits = totalVolumeCredits(this)
-        }
-
-    return statementData
 }

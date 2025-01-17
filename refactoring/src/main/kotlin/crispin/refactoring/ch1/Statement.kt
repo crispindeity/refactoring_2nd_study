@@ -11,7 +11,7 @@ fun krw(aNumber: Int): String? =
 fun statement(
     invoice: Invoice,
     plays: Map<String, Play>
-): String = renderPlainText(createStatementData(invoice, plays))
+): String = renderPlainText(CreateStatementData(invoice, plays).getStatementData())
 
 private fun renderPlainText(data: StatementData): String {
     var result = "청구 내역 (고객명: ${data.customer})\n"
@@ -30,10 +30,10 @@ fun htmlStatement(
     invoice: Invoice,
     plays: Map<String, Play>
 ) = renderHtml(
-    createStatementData(
+    CreateStatementData(
         invoice,
         plays
-    )
+    ).getStatementData()
 )
 
 private fun renderHtml(data: StatementData): String {
