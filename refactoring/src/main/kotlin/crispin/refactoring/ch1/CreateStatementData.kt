@@ -17,6 +17,11 @@ data class EnrichedPerformance(
     var volumeCredits: Int = 0
 }
 
+class PerformanceCalculator(
+    val aPerformance: Performance,
+    val aPlay: Play
+)
+
 fun createStatementData(
     invoice: Invoice,
     plays: Map<String, Play>
@@ -58,15 +63,17 @@ fun createStatementData(
 
     fun totalVolumeCredits(data: StatementData): Int = data.performances.sumOf { it.volumeCredits }
 
-    fun enrichPerformance(aPerformance: Performance): EnrichedPerformance =
-        EnrichedPerformance(
+    fun enrichPerformance(aPerformance: Performance): EnrichedPerformance {
+        val performanceCalculator = PerformanceCalculator(aPerformance, playFor(aPerformance))
+        return EnrichedPerformance(
             aPerformance.playID,
             aPerformance.audience,
-            playFor(aPerformance)
+            performanceCalculator.aPlay
         ).apply {
             amount = amountFor(this)
             volumeCredits = volumeCreditsFor(this)
         }
+    }
 
     val statementData =
         StatementData(
