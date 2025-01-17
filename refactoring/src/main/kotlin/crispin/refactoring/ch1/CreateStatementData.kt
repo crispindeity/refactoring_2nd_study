@@ -33,7 +33,7 @@ open class PerformanceCalculator(
             }
     }
 
-    fun getAmount(): Int {
+    open fun getAmount(): Int {
         var result: Int
         when (aPlay.type) {
             "tragedy" -> {
@@ -68,7 +68,15 @@ open class PerformanceCalculator(
 class TragedyCalculator(
     aPerformance: Performance,
     aPlay: Play
-) : PerformanceCalculator(aPerformance, aPlay)
+) : PerformanceCalculator(aPerformance, aPlay) {
+    override fun getAmount(): Int {
+        var result = 40000
+        if (this.aPerformance.audience > 30) {
+            result += 1000 * (this.aPerformance.audience - 30)
+        }
+        return result
+    }
+}
 
 class ComedyCalculator(
     aPerformance: Performance,
