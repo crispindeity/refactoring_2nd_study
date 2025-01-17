@@ -33,28 +33,7 @@ open class PerformanceCalculator(
             }
     }
 
-    open fun getAmount(): Int {
-        var result: Int
-        when (aPlay.type) {
-            "tragedy" -> {
-                result = 40000
-                if (aPerformance.audience > 30) {
-                    result += 1000 * (aPerformance.audience - 30)
-                }
-            }
-
-            "comedy" -> {
-                result = 30000
-                if (aPerformance.audience > 20) {
-                    result += 10000 + 500 * (aPerformance.audience - 20)
-                }
-                result += 300 * aPerformance.audience
-            }
-
-            else -> throw IllegalArgumentException("알 수 없는 장르: ${aPlay.type}")
-        }
-        return result
-    }
+    open fun getAmount(): Int = throw IllegalStateException("서브클래스에서 처리하도록 변경되었습니다.")
 
     fun getVolumeCredits(): Int {
         var volumeCredits = 0
@@ -81,7 +60,16 @@ class TragedyCalculator(
 class ComedyCalculator(
     aPerformance: Performance,
     aPlay: Play
-) : PerformanceCalculator(aPerformance, aPlay)
+) : PerformanceCalculator(aPerformance, aPlay) {
+    override fun getAmount(): Int {
+        var result = 30000
+        if (this.aPerformance.audience > 20) {
+            result += 10000 + 500 * (this.aPerformance.audience - 20)
+        }
+        result += 300 * this.aPerformance.audience
+        return result
+    }
+}
 
 fun createStatementData(
     invoice: Invoice,
