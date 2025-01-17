@@ -9,9 +9,10 @@ class StatementTest :
             // given
             val invoice: Invoice = invoices[0]
             val plays: Map<String, Play> = plays
+            val statement = Statement(invoice, plays)
 
             // when
-            val result: String = statement(invoice, plays)
+            val result: String = statement.renderPlainText()
 
             // then
             result shouldBe
