@@ -43,6 +43,15 @@ class PerformanceCalculator(
         }
         return result
     }
+
+    fun getVolumeCredits(): Int {
+        var volumeCredits = 0
+        volumeCredits += maxOf(aPerformance.audience - 30, 0)
+
+        if ("comedy" == aPlay.type) volumeCredits += aPerformance.audience / 5
+        return volumeCredits
+    }
+
 }
 
 fun createStatementData(
@@ -50,14 +59,6 @@ fun createStatementData(
     plays: Map<String, Play>
 ): StatementData {
     fun playFor(aPerformance: Performance): Play = plays[aPerformance.playID]!!
-
-    fun volumeCreditsFor(aPerformance: EnrichedPerformance): Int {
-        var volumeCredits = 0
-        volumeCredits += maxOf(aPerformance.audience - 30, 0)
-
-        if ("comedy" == aPerformance.play.type) volumeCredits += aPerformance.audience / 5
-        return volumeCredits
-    }
 
     fun totalAmount(data: StatementData): Int = data.performances.sumOf { it.amount }
 
@@ -71,7 +72,7 @@ fun createStatementData(
             performanceCalculator.aPlay
         ).apply {
             amount = performanceCalculator.getAmount()
-            volumeCredits = volumeCreditsFor(this)
+            volumeCredits = performanceCalculator.getVolumeCredits()
         }
     }
 
